@@ -9,7 +9,7 @@ const client = new Client({
     ]
 })
 client.on('ready', (c) => {
-    console.log(`✅${c.user.username} is online`)
+    console.log(`🤖 ${c.user.username} is 🟢 online`)
  
 })
 client.on('messageCreate' , (message) => {
@@ -18,7 +18,18 @@ client.on('messageCreate' , (message) => {
         return;
     }
     if(message.content == 'hey'){
-        message.reply(`Hello ${message.author}`);
+        message.reply(`Hello ${message.author} what can i do for you? 😊`);
     }
+    
 });
+client.on('interactionCreate', (interaction) => {
+    if(!interaction.isChatInputCommand()) return;
+    console.log(interaction.commandName);
+    if(interaction.commandName === 'hey'){
+        interaction.reply('hey!')
+    }
+    if(interaction.commandName === 'ping'){
+        interaction.reply('pong!')
+    }
+})
 client.login(process.env.TOKEN);
