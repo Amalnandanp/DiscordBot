@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { Client, IntentsBitField, EmbedBuilder } = require('discord.js');
+const { Client, IntentsBitField, EmbedBuilder,ActivityType } = require('discord.js');
 const client = new Client({
     intents: [
         IntentsBitField.Flags.Guilds,
@@ -8,35 +8,56 @@ const client = new Client({
         IntentsBitField.Flags.MessageContent,
     ]
 })
-client.on('ready', (c) => {
-    console.log(`🤖 ${c.user.username} is 🟢 online`)
-})
-client.on('interactionCreate', async (interaction) => {
-    try{
-     if(!interaction.isButton()) return;
-     await interaction.deferReply({
-         ephemeral:true,
-     });
-     const role = interaction.guild.roles.cache.get(interaction.customId);
-     if(!role){
-         interaction.editReply({
-             content:'I couldnt find the role',
-         })
-         return
-     }
-     const  hasRole = interaction.member.roles.cache.has(role.id);
-     if(hasRole){
-         await interaction.member.roles.remove(role);
-         await interaction.editReply(`The role ${role} has been removed.`);
-         return
-     }
-     await interaction.member.roles.add(role);
-     await interaction.editReply(`The role ${role} has been added.`);
-    } catch(error){
-     console.log(error);
-     
+let status = [
+    {
+        name:'Hello you',
+        type:ActivityType.Streaming,
+        url:'https://www.youtube.com/watch?v=OqxHy8sCtvA&list=PLpmb-7WxPhe0ZVpH9pxT5MtC4heqej8Es&index=8'
+    },
+    {
+        name:'R u listening?',
+        type:ActivityType.Streaming,
+        url:'https://www.youtube.com/watch?v=OqxHy8sCtvA&list=PLpmb-7WxPhe0ZVpH9pxT5MtC4heqej8Es&index=8'
+    },
+    {
+        name:'Am talking to you!',
+        type:ActivityType.Streaming,
+        url:'https://www.youtube.com/watch?v=OqxHy8sCtvA&list=PLpmb-7WxPhe0ZVpH9pxT5MtC4heqej8Es&index=8'
     }
- })
+]
+client.on('ready', (c) => {
+    console.log(`🤖 ${c.user.username} is 🟢 online`);
+    setInterval(() => {
+        let random = Math.floor(Math.random() * status.length);
+        client.user.setActivity(status[random]);
+    }, 10000);
+})
+// client.on('interactionCreate', async (interaction) => {
+//     try{
+//      if(!interaction.isButton()) return;
+//      await interaction.deferReply({
+//          ephemeral:true,
+//      });
+//      const role = interaction.guild.roles.cache.get(interaction.customId);
+//      if(!role){
+//          interaction.editReply({
+//              content:'I couldnt find the role',
+//          })
+//          return
+//      }
+//      const  hasRole = interaction.member.roles.cache.has(role.id);
+//      if(hasRole){
+//          await interaction.member.roles.remove(role);
+//          await interaction.editReply(`The role ${role} has been removed.`);
+//          return
+//      }
+//      await interaction.member.roles.add(role);
+//      await interaction.editReply(`The role ${role} has been added.`);
+//     } catch(error){
+//      console.log(error);
+     
+//     }
+//  })
 // client.on('messageCreate', (message) => {
 //     // console.log(message.content);
 //     if (message.author.bot) {
